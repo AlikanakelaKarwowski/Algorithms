@@ -4,7 +4,10 @@
 #include <string>
 #include <iostream>
 #include <stdlib.h>
+
+//librarys added to meet project requirements
 #include <time.h>
+#include <fstream>
 
 // 'BigIntegerLibrary.hh' includes all of the library headers.
 #include "BigIntegerLibrary.hh"
@@ -12,24 +15,44 @@
 bool isPrime(BigUnsigned&);
 BigUnsigned createBig();
 int main(){
+
 	/* The library throws 'const char *' error messages when things go
 	 * wrong.  It's a good idea to catch them using a 'try' block like this
 	 * one.  Your C++ compiler might need a command-line option to compile
 	 * code that uses exceptions. */
-	try {
-			srand (time(NULL));
+	try
+	{
+		std::ofstream p_q, e_n, d_n;
+		p_q.open("p_q.txt");
 
-		BigUnsigned bigPrime1 = createBig();
-	  while (!isPrime(bigPrime1))
+		//set the seed to get random numbers
+		srand (time(NULL));
+
+		BigUnsigned bigPP = createBig();
+	  while (!isPrime(bigPP))
 	  {
-	      bigPrime1 = createBig();
+	      bigPP = createBig();
 	  }
-	  std::cout << "bigPrime1: " << bigPrime1;
+		std::cout << "bigPP:\n" << bigPP;
 	  std::cout << std::endl << std::endl;
+
+		p_q << bigPP << '\n';
+
+		BigUnsigned bigPQ = createBig();
+	  while (!isPrime(bigPQ))
+	  {
+	      bigPQ = createBig();
+	  }
+	  std::cout << "bigPQ:\n" << bigPQ;
+	  std::cout << std::endl << std::endl;
+
+		p_q << bigPQ << '\n';
+
 	} catch(char const* err) {
 		std::cout << "The library threw an exception:\n"
 			<< err << std::endl;
 	}
+
 
 	return 0;
 }
