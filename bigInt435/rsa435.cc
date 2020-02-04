@@ -61,20 +61,45 @@ int main(){
 		BigUnsigned phiN = (bigPP-1)*(bigPQ-1);
 		std::cout <<"PhiN:\n" << phiN << std::endl;
 
-		//BigUnsigned bigE = gcd(phiN, )
+		BigUnsigned bigE = BigUnsigned(rand() % 999 + 100);
+
+		int failsafe = 0;
+		while(true)
+		{
+			if(gcd(bigE,phiN)!=1)
+				bigE +=1;
+
+			failsafe++;
+
+			if(failsafe >=1000)
+			{
+				std::cout << "WARNING No Coprimes"<<std::endl;
+				break;
+			}
+
+			if(gcd(bigE,phiN) == 1)
+				break;
+		}
+
+		std::cout << "BigE:\n" << bigE << std::endl;
+
+		BigUnsigned bigD = modinv(bigE, phiN);
+      std::cout << "bigD:\n" << bigD << std::endl;
+      BigUnsigned modInv= bigD * bigE;
+      BigUnsigned remainder2;
+      modInv.divideWithRemainder(phiN, remainder2);
+      std::cout << "modInverse:\n" << modInv << std::endl << std:: endl;
+
 	} catch(char const* err) {
-		std::cout << "The library threw an exception:\n"
-			<< err << std::endl;
+		std::cout << "The library threw an exception:\n"<< err << std::endl;
 	}
-
-
 	return 0;
 }
 BigUnsigned createBig()
 {
 	// get random BigUnsigned int >= 512 bits
 	 BigUnsigned bigInt512 = BigUnsigned(1);
-	 while (bigInt512.bitLength() < 10)
+	 while (bigInt512.bitLength() < 3)
 	 {
 			 bigInt512 = bigInt512*10 +rand();
 	 }
