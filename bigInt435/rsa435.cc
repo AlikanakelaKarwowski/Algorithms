@@ -37,7 +37,7 @@ int main(){
 
 		//print out results to verify correct operations have occurred
 		std::cout << "bigPP:\n" << bigPP;
-	  std::cout << std::endl << std::endl;
+	  std::cout << std::endl;
 
 		//write the prime number p to file
 		p_q << bigPP << '\n';
@@ -50,14 +50,18 @@ int main(){
 
 		//print out results to verify correct operation have occurred
 	  std::cout << "bigPQ:\n" << bigPQ;
-	  std::cout << std::endl << std::endl;
+	  std::cout << std::endl;
 
+		//write the prime number q to file
 		p_q << bigPQ << '\n';
 
 		BigUnsigned bigN = BigUnsigned(bigPP*bigPQ);
 		std::cout <<"BigN:\n" << bigN << std::endl;
-		
 
+		BigUnsigned phiN = (bigPP-1)*(bigPQ-1);
+		std::cout <<"PhiN:\n" << phiN << std::endl;
+
+		//BigUnsigned bigE = gcd(phiN, )
 	} catch(char const* err) {
 		std::cout << "The library threw an exception:\n"
 			<< err << std::endl;
