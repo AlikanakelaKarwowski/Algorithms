@@ -28,14 +28,18 @@ int main(){
 		//set the seed to get random numbers
 		srand (time(NULL));
 
+		//generate p and q
 		BigUnsigned bigPP = createBig();
 	  while (!isPrime(bigPP))
 	  {
 	      bigPP = createBig();
 	  }
+
+		//print out results to verify correct operations have occurred
 		std::cout << "bigPP:\n" << bigPP;
 	  std::cout << std::endl << std::endl;
 
+		//write the prime number p to file
 		p_q << bigPP << '\n';
 
 		BigUnsigned bigPQ = createBig();
@@ -43,10 +47,16 @@ int main(){
 	  {
 	      bigPQ = createBig();
 	  }
+
+		//print out results to verify correct operation have occurred
 	  std::cout << "bigPQ:\n" << bigPQ;
 	  std::cout << std::endl << std::endl;
 
 		p_q << bigPQ << '\n';
+
+		BigUnsigned bigN = BigUnsigned(bigPP*bigPQ);
+		std::cout <<"BigN:\n" << bigN << std::endl;
+		
 
 	} catch(char const* err) {
 		std::cout << "The library threw an exception:\n"
