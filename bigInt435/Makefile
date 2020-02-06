@@ -12,6 +12,7 @@ library-objects = \
 	BigIntegerAlgorithms.o \
 	BigUnsignedInABase.o \
 	BigIntegerUtils.o \
+	sha256.o \
 
 library-headers = \
 	NumberlikeArray.hh \
@@ -20,6 +21,7 @@ library-headers = \
 	BigIntegerAlgorithms.hh \
 	BigUnsignedInABase.hh \
 	BigIntegerLibrary.hh \
+	sha256.h \
 
 # To ``make the library'', make all its objects using the implicit rule.
 library: $(library-objects)
@@ -62,7 +64,7 @@ $(program) : $(program-objects) $(library-objects)
 
 # Delete all generated files we know about.
 clean :
-	rm -f $(library-objects) $(testsuite-cleanfiles) $(program-objects) $(program)
+	rm -f $(library-objects) $(testsuite-cleanfiles) $(program-objects) $(program) 'p_q.txt' 'd_n.txt' 'e_n.txt' 'message.txt'
 
 # I removed the *.tag dependency tracking system because it had few advantages
 # over manually entering all the dependencies.  If there were a portable,
