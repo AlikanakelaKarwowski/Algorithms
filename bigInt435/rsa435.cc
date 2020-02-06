@@ -23,7 +23,6 @@ int main(){
 	try
 	{
 		std::ofstream p_q, e_n, d_n;
-		p_q.open("p_q.txt");
 
 		//set the seed to get random numbers
 		srand (time(NULL));
@@ -39,9 +38,6 @@ int main(){
 		std::cout << "bigPP:\n" << bigPP;
 	  std::cout << std::endl;
 
-		//write the prime number p to file
-		p_q << bigPP << '\n';
-
 		BigUnsigned bigPQ = createBig();
 	  while (!isPrime(bigPQ))
 	  {
@@ -52,8 +48,10 @@ int main(){
 	  std::cout << "bigPQ:\n" << bigPQ;
 	  std::cout << std::endl;
 
-		//write the prime number q to file
-		p_q << bigPQ << '\n';
+		//write the prime number p and q to file, then close the file
+		p_q.open("p_q.txt");
+		p_q << bigPP << '\n' << bigPQ;
+		p_q.close();
 
 		BigUnsigned bigN = BigUnsigned(bigPP*bigPQ);
 		std::cout <<"BigN:\n" << bigN << std::endl;
@@ -63,6 +61,7 @@ int main(){
 
 		BigUnsigned bigE = BigUnsigned(rand() % 999 + 100);
 
+		//find a valid big E for coprimes
 		int failsafe = 0;
 		while(true)
 		{
@@ -84,11 +83,19 @@ int main(){
 		std::cout << "BigE:\n" << bigE << std::endl;
 
 		BigUnsigned bigD = modinv(bigE, phiN);
-      std::cout << "bigD:\n" << bigD << std::endl;
-      BigUnsigned modInv= bigD * bigE;
-      BigUnsigned remainder2;
-      modInv.divideWithRemainder(phiN, remainder2);
-      std::cout << "modInverse:\n" << modInv << std::endl << std:: endl;
+    std::cout << "bigD:\n" << bigD << std::endl;
+    BigUnsigned modInv= bigD * bigE;
+    BigUnsigned remainder2;
+    modInv.divideWithRemainder(phiN, remainder2);
+    std::cout << "modInverse:\n" << modInv << std::endl << std:: endl;
+
+		e_n.open("e_n.txt");
+		e_n << bigE << '\n' << bigN;
+		e_n.close();
+
+		d_n.open("d_n.txt");
+		d_n << bigD << '\n' << bigN;
+		d_n.close();
 
 	} catch(char const* err) {
 		std::cout << "The library threw an exception:\n"<< err << std::endl;
@@ -99,7 +106,7 @@ BigUnsigned createBig()
 {
 	// get random BigUnsigned int >= 512 bits
 	 BigUnsigned bigInt512 = BigUnsigned(1);
-	 while (bigInt512.bitLength() < 3)
+	 while (bigInt512.bitLength() < 512)
 	 {
 			 bigInt512 = bigInt512*10 +rand();
 	 }
