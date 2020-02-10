@@ -37,15 +37,29 @@ int main(int argc, char *argv[])
       myfile2.close();
 
       std::cout<<memblock;
-      std::string signingString = memblock;
-
-      std::cout << signingString << '\n';
 
       if (argv[1][0]=='s') {
          std::cout << "\n"<<"Need to sign the doc.\n";
-         sha256()
+         //make hash function
 
+         std::string sha256Hash = sha256(memblock);
+         BigUnsignedInABase shaBase16 = BigUnsignedInABase(sha256Hash, 16);
+         BigUnsigned shaBase10 = shaBase16;
 
+         //open up the file generated in
+         std::fstream d_n("..\\messageDigest435\\d_n.txt", std::fstream::in | std::fstream::out);
+         std::string temp;
+         d_n >> temp;
+         BigUnsigned bigD = stringToBigUnsigned(temp);
+         d_n >>temp;
+         BigUnsigned bigN = stringToBigUnsigned(temp);
+
+         BigUnsigned signature = modexp(shaBase10,bigD,bigN);
+         std::ofstream signed;
+         signed.open("file.txt.signature");
+         signed << signature;
+         signed.close();
+         std::cout << "Message is signed.";
       }
       else {
          std::cout << "\n"<<"Need to verify the doc.\n";
