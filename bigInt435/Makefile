@@ -12,7 +12,6 @@ library-objects = \
 	BigIntegerAlgorithms.o \
 	BigUnsignedInABase.o \
 	BigIntegerUtils.o \
-	sha256.o \
 
 library-headers = \
 	NumberlikeArray.hh \
@@ -21,7 +20,6 @@ library-headers = \
 	BigIntegerAlgorithms.hh \
 	BigUnsignedInABase.hh \
 	BigIntegerLibrary.hh \
-	sha256.h \
 
 # To ``make the library'', make all its objects using the implicit rule.
 library: $(library-objects)
@@ -51,7 +49,7 @@ testsuite-cleanfiles = \
 # your own Makefile.
 
 # Components of the program.
-program = rsa435
+program = rsa435.exe
 program-objects = rsa435.o
 
 # Conservatively assume all the program source files depend on all the library
@@ -62,9 +60,14 @@ $(program-objects) : $(library-headers)
 $(program) : $(program-objects) $(library-objects)
 	g++ $^ -o $@
 
+#text files created on run
+text-files = \
+ 	p_q.txt \
+	d_n.txt \
+	e_n.txt \
 # Delete all generated files we know about.
 clean :
-	rm -f $(library-objects) $(testsuite-cleanfiles) $(program-objects) $(program) 'p_q.txt' 'd_n.txt' 'e_n.txt' 'message.txt'
+	rm -f $(library-objects) $(testsuite-cleanfiles) $(program-objects) $(program) $(text-files)
 
 # I removed the *.tag dependency tracking system because it had few advantages
 # over manually entering all the dependencies.  If there were a portable,
