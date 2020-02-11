@@ -54,6 +54,7 @@ testsuite-cleanfiles = \
 program = messageDigest435
 program-objects = messageDigest435.o
 
+
 # Conservatively assume all the program source files depend on all the library
 # headers.  You can change this if it is not the case.
 $(program-objects) : $(library-headers)
@@ -65,6 +66,8 @@ $(program) : $(program-objects) $(library-objects)
 # Delete all generated files we know about.
 clean :
 	rm -f $(library-objects) $(testsuite-cleanfiles) $(program-objects) $(program)
+	find ./ -name "*.signature" -delete
+	find ./ -name "*.Copy" -delete
 
 # I removed the *.tag dependency tracking system because it had few advantages
 # over manually entering all the dependencies.  If there were a portable,

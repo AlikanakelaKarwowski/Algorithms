@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
 
       if (argv[1][0]=='s')
       {
-        std::cout << "\n"<<"Need to sign the doc.\n";
+        std::cout << "Need to sign the doc.\n";
 
         //make hash
         std::string sha256Hash = sha256(memblock);
@@ -71,9 +71,10 @@ int main(int argc, char *argv[])
         sign << signature;
         sign.close();
         std::cout << "Message is signed.\n";
+        std::cout << "Please use the \'v\' flag and \"" << filename << ".signature\" to verify authenticity\n";
       }
       else if (argv[1][0] =='v') {
-        std::cout << "\n"<<"Need to verify the doc.\n";
+        std::cout <<"Need to verify the doc.\n";
 
         //make hash
         std::string sha256Hash = sha256(memblock);
