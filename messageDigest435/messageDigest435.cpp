@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
       {
         std::cout << "\n"<<"Need to sign the doc.\n";
 
-        //make hash function
+        //make hash
         std::string sha256Hash = sha256(memblock);
         //convert from from base 16 to base 10
         BigUnsignedInABase shaBase16 = BigUnsignedInABase(sha256Hash, 16);
@@ -51,6 +51,7 @@ int main(int argc, char *argv[])
         //open up the d_n.txt
         std::fstream d_n("d_n.txt", std::fstream::in | std::fstream::out);
         std::string temp;
+
         //read the first line into the temp string
         d_n >> temp;
         //convert from string to big unsigned
@@ -60,6 +61,7 @@ int main(int argc, char *argv[])
         d_n >> temp;
         //convert from string to big unsigned
         BigUnsigned bigN = stringToBigUnsigned(temp);
+
         //do modexp to get the signature
         BigUnsigned signature = modexp(originalMessage,bigD,bigN);
 
@@ -70,10 +72,10 @@ int main(int argc, char *argv[])
         sign.close();
         std::cout << "Message is signed.\n";
       }
-      else {
+      else if (argv[1][0] =='v') {
         std::cout << "\n"<<"Need to verify the doc.\n";
 
-        //make hash function
+        //make hash
         std::string sha256Hash = sha256(memblock);
         //convert from from base 16 to base 10
         BigUnsignedInABase shaBase16 = BigUnsignedInABase(sha256Hash, 16);
@@ -83,11 +85,13 @@ int main(int argc, char *argv[])
         //open up the e_n.txt file
         std::fstream e_n("e_n.txt", std::fstream::in | std::fstream::out);
         std::string temp;
+
         //read the first line into the temp string
         e_n >> temp;
         //convert from string to big unsigned
         BigUnsigned bigE = stringToBigUnsigned(temp);
         temp = "";
+
         //read second line into temp string
         e_n >> temp;
         //convert from string to big unsigned
@@ -105,7 +109,10 @@ int main(int argc, char *argv[])
         //convert string to BigUnsigned
         BigUnsigned signature = stringToBigUnsigned(signatureKey);
 
+        //decrypt the signature key
         BigUnsigned decrypt = modexp(signature,bigE,bigN);
+
+        //check to see if the signature key is the same or if the file has been modified
         if(originalMessage == decrypt)
         {
           std::cout << "Document is Authentic.\n";
