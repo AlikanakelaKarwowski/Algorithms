@@ -65,9 +65,10 @@ $(program) : $(program-objects) $(library-objects)
 
 # Delete all generated files we know about.
 clean :
-	rm -f $(library-objects) $(testsuite-cleanfiles) $(program-objects) $(program)
+	rm -f $(library-objects) $(testsuite-cleanfiles) $(program-objects) $(program) messageDigest435
 	find ./ -name "*.signature" -delete
 	find ./ -name "*.Copy" -delete
+
 
 # I removed the *.tag dependency tracking system because it had few advantages
 # over manually entering all the dependencies.  If there were a portable,
