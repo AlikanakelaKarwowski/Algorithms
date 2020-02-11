@@ -12,8 +12,11 @@
 // 'BigIntegerLibrary.hh' includes all of the library headers.
 #include "BigIntegerLibrary.hh"
 
+//function prototypes
 bool isPrime(BigUnsigned&);
 BigUnsigned createBig();
+BigUnsigned findCoPrime(BigUnsigned, BigUnsigned, int);
+
 int main(){
 
 	/* The library throws 'const char *' error messages when things go
@@ -27,75 +30,59 @@ int main(){
 		//set the seed to get random numbers
 		srand (time(NULL));
 
-		//generate p and q
+		//print out loading message.
+		std::cout << "Generating Prime Number P. Please wait...\n";
+
+		//generate prime numbers
 		BigUnsigned bigPP = createBig();
 	  while (!isPrime(bigPP))
 	  {
 	      bigPP = createBig();
 	  }
 
-		//print out results to verify correct operations have occurred
-		std::cout << "bigPP:\n" << bigPP;
-	  std::cout << std::endl;
+		//print out loading message.
+		std::cout << "Generating Prime Number Q. Please wait...\n";
 
+		//generate prime number
 		BigUnsigned bigPQ = createBig();
 	  while (!isPrime(bigPQ))
 	  {
 	      bigPQ = createBig();
 	  }
 
-		//print out results to verify correct operation have occurred
-	  std::cout << "bigPQ:\n" << bigPQ;
-	  std::cout << std::endl;
+		std::cout << "Writing prime numbers to file.\n";
 
 		//write the prime number p and q to file, then close the file
 		p_q.open("p_q.txt");
 		p_q << bigPP << '\n' << bigPQ;
 		p_q.close();
 
+		//calculate n and phi(n)
 		BigUnsigned bigN = BigUnsigned(bigPP*bigPQ);
-		std::cout <<"BigN:\n" << bigN << std::endl;
-
 		BigUnsigned phiN = (bigPP-1)*(bigPQ-1);
-		std::cout <<"PhiN:\n" << phiN << std::endl;
 
+		//create a random number e 3 digits long
 		BigUnsigned bigE = BigUnsigned(rand() % 999 + 100);
 
 		//find a valid big E for coprimes
 		int failsafe = 0;
-		while(true)
-		{
-			if(gcd(bigE,phiN)!=1)
-				bigE +=1;
+		bigE = findCoPrime(bigE,phiN,failsafe);
 
-			failsafe++;
-
-			if(failsafe >=1000)
-			{
-				std::cout << "WARNING No Coprimes"<<std::endl;
-				break;
-			}
-
-			if(gcd(bigE,phiN) == 1)
-				break;
-		}
-
-		std::cout << "BigE:\n" << bigE << std::endl;
-
+		//find d using modinv method created in the library
 		BigUnsigned bigD = modinv(bigE, phiN);
-    std::cout << "bigD:\n" << bigD << std::endl;
-    BigUnsigned modInv= bigD * bigE;
-    BigUnsigned remainder2;
-    modInv.divideWithRemainder(phiN, remainder2);
-    std::cout << "modInverse:\n" << modInv << std::endl << std:: endl;
 
+		//write e and n to file
 		e_n.open("e_n.txt");
 		e_n << bigE << '\n' << bigN;
 		e_n.close();
 
+		//write d and n to file
 		d_n.open("d_n.txt");
 		d_n << bigD << '\n' << bigN;
 		d_n.close();
+
+		std::cout <<"Done generating private and public keys.\n"<<
+		"Please copy \"e_n.txt\" and \"d_n.txt\" into the messageDigest435 directory before continuing.\n";
 
 	} catch(char const* err) {
 		std::cout << "The library threw an exception:\n"<< err << std::endl;
@@ -126,4 +113,26 @@ bool isPrime(BigUnsigned& bigInt){
         return true;
     else
         return false;
+}
+
+BigUnsigned findCoPrime(BigUnsigned e, BigUnsigned phiN, int failsafe)
+{
+	while(true)
+	{
+		//if e is not a co prime, add one and check again
+		if(gcd(e,phiN)!=1)
+			e +=1;
+		//if e is a co prime, return e
+		if(gcd(e,phiN) == 1)
+			return e;
+
+		//failsafe so that the loop doesnt get hung up on trying to find co primes.
+		failsafe++;
+		//break after 1000 failed tries to find a coprime and return e;
+		if(failsafe >=1000)
+		{
+			std::cout << "WARNING No Coprimes"<<std::endl;
+			return e;
+		}
+	}
 }
