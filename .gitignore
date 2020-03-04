@@ -31,8 +31,14 @@
 *.out
 *.app
 
-#Specifics
+#Executables
 rsa435
+convexHull
+
+#Folders
 /GUI4ConvexHall/
+
+#Misc
 *.txt
 *.zip
+
