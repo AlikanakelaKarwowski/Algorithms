@@ -31,5 +31,8 @@
 *.out
 *.app
 
+#Specifics
 rsa435
+/GUI4ConvexHall/
 *.txt
+*.zip
