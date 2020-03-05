@@ -5,20 +5,15 @@
 //This implementation is taken from
 //https://www.geeksforgeeks.org/convex-hull-set-1-jarviss-algorithm-or-wrapping/
 //with permission from Prof. Duan to use in this project.
-#include <vector>
-#include <iostream>
 
-struct Point
-{
-	int x, y;
-};
+#include "JarvisMarch.hpp"
 
 // To find orientation of ordered triplet (p, q, r).
 // The function returns following values
 // 0 --> p, q and r are colinear
 // 1 --> Clockwise
 // 2 --> Counterclockwise
-int orientation(Point p, Point q, Point r)
+int Jarvis::orientation(Point p, Point q, Point r)
 {
 	int val = (q.y - p.y) * (r.x - q.x) -
 			(q.x - p.x) * (r.y - q.y);
@@ -28,10 +23,11 @@ int orientation(Point p, Point q, Point r)
 }
 
 // Prints convex hull of a set of n points.
-void convexHull(Point points[], int n)
+void Jarvis::convexHull(std::vector<Point> points, int n, std::ofstream &output)
 {
 	// There must be at least 3 points
-	if (n < 3) return;
+	if (n < 3)
+        return;
 
 	// Initialize Result
 	std::vector<Point> hull;
@@ -74,8 +70,7 @@ void convexHull(Point points[], int n)
 
 	// Print Result
 	for (int i = 0; i < hull.size(); i++)
-		std::cout << "(" << hull[i].x << ", "
-			<< hull[i].y << ")\n";
+		output << hull[i].x << '\t' << hull[i].y << '\n';
 }
 
 // Driver program to test above functions
