@@ -31,20 +31,16 @@ int main(int argc, char *argv[])
                 {
                     //call your Javis March algorithm to solve the problem
                     Jarvis jarvisHull;
+                    Point tmp;
                     std::vector<Point> points;
                     int n=0, x=0, y=0;
-                    std::cout << "here";
-                    while (!dataFile)
+                    
+                    while(dataFile >> tmp.x >> tmp.y)
                     {
-                        Point tmp;
-                        dataFile >> x;
-                        dataFile >> y;
-                        tmp.x = x, tmp.y = y;
                         points.push_back(tmp);
                         ++n;
-                        std::cout << "2";
                     }
-                    std::cout << "1";
+
                     outputFile = "hull_J.txt";
                     std::ofstream hullFile(outputFile);
                     jarvisHull.convexHull(points, n, hullFile);
