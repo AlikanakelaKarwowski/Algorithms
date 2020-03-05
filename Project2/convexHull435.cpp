@@ -34,14 +34,14 @@ int main(int argc, char *argv[])
                     Point tmp;
                     std::vector<Point> points;
                     int n=0, x=0, y=0;
-                    
+
                     while(dataFile >> tmp.x >> tmp.y)
                     {
                         points.push_back(tmp);
                         ++n;
                     }
 
-                    outputFile = "hull_J.txt";
+                    outputFile = "hull_J_" + dataFilename;
                     std::ofstream hullFile(outputFile);
                     jarvisHull.convexHull(points, n, hullFile);
                     hullFile.close();
