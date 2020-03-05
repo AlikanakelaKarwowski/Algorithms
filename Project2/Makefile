@@ -23,9 +23,11 @@ clean :
 	@rm -f *.o convexHull435 hull_G.txt hull_J.txt hull_Q.txt
 .PHONY: run
 run : convexHull435
-	./convexHull435 G test.txt
+
 	./convexHull435 J test.txt
-	./convexHull435 Q test.txt
+
+#./convexHull435 G test.txt
+#./convexHull435 Q test.txt
 
 .PHONY: fake
 fake : convexHull435
