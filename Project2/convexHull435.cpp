@@ -2,9 +2,9 @@
 
 // Standard libraries
 #include <string>
-#include <stdlib.h>
-#include <fstream>
+#include "convexHull435.hpp"
 #include "JarvisMarch.hpp"
+#include "GrahamScan.hpp"
 
 int main(int argc, char *argv[])
 {
@@ -22,10 +22,26 @@ int main(int argc, char *argv[])
         switch(algType[0])
         {
             case 'G':
+            {
                 //call your Graham Scan algorithm to solve the problem
 
-                outputFile = "hull_G.txt";
+                Graham grahamHull;
+                Point tmp;
+                std::vector<Point> points;
+                int n=0, x=0, y=0;
+
+                while(dataFile >> tmp.x >> tmp.y)
+                {
+                    points.push_back(tmp);
+                    ++n;
+                }
+
+                outputFile = "hull_G_" + dataFilename;
+                std::ofstream hullFile(outputFile);
+                grahamHull.convexHull(points, n, hullFile);
+                hullFile.close();
                 break;
+            }
 
             case 'J':
                 {
