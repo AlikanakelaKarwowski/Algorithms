@@ -262,7 +262,8 @@ public class ConvexHull_GUI extends JPanel
 
    public static void main(String[] args) {
       ConvexHull_GUI CH = new ConvexHull_GUI();
-      boolean generateData =  false;
+      int f = Integer.parseInt(args[0]);
+      boolean generateData =  (f==1);
       if (generateData){
           CH.testFileGen("rectangle10.txt", "rectangle", 10); //generate data points
           CH.testFileGen("rectangle100.txt", "rectangle", 100); //generate data points
@@ -293,8 +294,8 @@ public class ConvexHull_GUI extends JPanel
       }
       else {
          //visulizing the points and convex hull
-         String dataFile = args[0];
-         String hullFile = "hull_J_" + dataFile;
+         String dataFile = args[1];
+         String hullFile = args[2] + args[1];
 
          CH.readDataFile(dataFile, 'd');
          System.out.println(dataFile + " has "+CH.getData().size()+" points.");
