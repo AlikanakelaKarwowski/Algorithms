@@ -11,7 +11,7 @@ convexHull435.o : convexHull435.cpp
 
 .PHONY: clean
 clean :
-	@rm -f *.o convexHull435 hull_G* hull_J* hull_Q*
+	@rm -f *.o convexHull435 hull_G* hull_J* hull_Q* *.class
 
 .PHONY: cleanTest
 cleanTest :
@@ -153,24 +153,3 @@ testQ: convexHull435
 	java ConvexHull_GUI 0 rectangle100000.txt hull_Q_
 	java ConvexHull_GUI 0 triangle10.txt hull_Q_
 	java ConvexHull_GUI 0 triangle100000.txt hull_Q_
-#.PHONY: all
-#all : convexHull435
-
-#convexHull435 : convexHull435.o Graham.o Jarvis.o ConvexHull.o
-#g++ convexHull435.o Graham.o Jarvis.o ConvexHull.o -o convexHull435
-
-#convexHull435.o : convexHull435.cc Graham.hpp Jarvis.hpp ConvexHull.hpp
-#g++ -std=c++11 -c convexHull435.cc
-
-#Graham.o : Graham.cpp
-#g++ -std=c++11 -c Graham.cpp
-
-#Jarvis.o : Jarvis.cpp
-#g++ -std=c++11 -c Jarvis.cpp
-
-#ConvexHull.o : ConvexHull.cpp
-#g++ -std=c++11 -c ConvexHull.cpp
-
-#.PHONY: clean
-#clean :
-#@rm -f *.o convexHull435 hull_G.txt hull_J.txt hull_Q.txt
