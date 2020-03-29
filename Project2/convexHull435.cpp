@@ -3,14 +3,14 @@
 // Algorithms Project 2
 
 
-// You need to complete this program for your y project.
+// You need to complete this program for your project.
 // Standard libraries
 
-// DISCLAIMER: all of the code besides the driver function was taken from:
+// DISCLAIMER: all of the code besides the main driver function was taken from:
 // https://www.geeksforgeeks.org/quickhull-algorithm-convex-hull/
 // https://www.geeksforgeeks.org/convex-hull-set-1-jarviss-algorithm-or-wrapping/
 // https://www.geeksforgeeks.org/convex-hull-set-2-graham-scan/
-// with permission from Prof. Duan.
+// and was used with permission from Prof. Duan.
 
 #include <stack>
 #include <stdlib.h>
@@ -19,14 +19,21 @@
 #include <vector>
 #include <set>
 
+// Create a point structure to store x and y values in.
 struct Point
 {
 	int x, y;
 };
 
+// Stores the result (points of convex hull)
+// Use a set to make sure duplicate values are ommited
+std::set<Point> hull;
+
+// Jarvis March Functions //
 int jOrientation(Point p, Point q, Point r);
 void jConvexHull(std::vector<Point> points, int n, std::ofstream &output);
 
+// Graham Scan Functions //
 Point gNextToTop(std::stack<Point> &S);
 void gSwap(Point &p1, Point &p2);
 int gDistSq(Point p1, Point p2);
@@ -34,13 +41,12 @@ int gOrientation(Point p, Point q, Point r);
 int gCompare(const void *vp1, const void *vp2);
 void gConvexHull(Point points[], int n, std::ofstream &output);
 
-// Stores the result (points of convex hull)
-std::set<Point> hull;
-
+// Quick Hull Functions //
 int qFindSide(Point p1, Point p2, Point p);
 int qLineDist(Point p1, Point p2, Point p);
 void qHull(Point a[], int n, Point p1, Point p2, int side);
 void qPrintHull(Point a[], int n, std::vector<Point>& convexHull, std::ofstream &output);
+
 
 int main(int argc, char *argv[])
 {
@@ -48,41 +54,51 @@ int main(int argc, char *argv[])
         std::cout << "wrong format! should be \"a.exe algType dataFile\"";
     else
     {
+        // Argument 1 used to determine Algorithm Type to use
         std::string algType = argv[1];
+        // Argument 2 used to determine the filename to open
         std::string dataFilename = argv[2];
+
         std::string outputFile = "";
         std::ifstream dataFile;
-        dataFile.open(dataFilename);
-        //read your data points from dataFile (see class example for the format)
 
+        // Read data points from dataFile
+        dataFile.open(dataFilename);
+
+        // Use a switch statement because it is cleaner to look at
         switch(algType[0])
         {
             case 'G':
-            {
-                //call your Graham Scan algorithm to solve the problem
-                Point tmp;
-                std::vector<Point> vPair;
-                int n=0, x=0, y=0;
-
-                while(dataFile >> tmp.x >> tmp.y)
                 {
-                    vPair.push_back(tmp);
-                    ++n;
+                    //call your Graham Scan algorithm to solve the problem
+                    Point tmp;
+                    std::vector<Point> points;
+                    int n=0, x=0, y=0;
+
+                    // Read data points from file and store them as points in a vector
+                    while(dataFile >> tmp.x >> tmp.y)
+                        {
+                            points.push_back(tmp);
+                            ++n;
+                        }
+
+                    // NOTE: I could not get Graham scan to work with a vector so
+                    // This code takes the vectors elements and puts them in a pointer array.
+                    int vSize = points.size();
+                    Point *aPoints = new Point [vSize];
+                    for(int i = 0; i < vSize; ++i)
+                        aPoints[i] = points[i];
+
+                    // Create an output file which is in the format "hull_G_" + (File Name)
+                    outputFile = "hull_G_" + dataFilename;
+                    std::ofstream hullFile(outputFile);
+
+                    // Run Graham Scan 10 times to get better runtime results
+                    for (int i = 1; i < 10; i++)
+                        gConvexHull(aPoints, n, hullFile);
+                    hullFile.close();
+                    break;
                 }
-
-                int vSize = vPair.size();
-                Point *aPoints = new Point [vSize];
-                for(int i = 0; i < vSize; ++i)
-                    aPoints[i] = vPair[i];
-
-                outputFile = "hull_G_" + dataFilename;
-                std::ofstream hullFile(outputFile);
-                for (int i = 1; i < 10; i++)
-                    gConvexHull(aPoints, n, hullFile);
-
-                hullFile.close();
-                break;
-            }
             case 'J':
                 {
                     //call your Javis March algorithm to solve the problem
@@ -90,14 +106,18 @@ int main(int argc, char *argv[])
                     std::vector<Point> points;
                     int n=0, x=0, y=0;
 
+                    // Read data points from file and store them as points in a vector
                     while(dataFile >> tmp.x >> tmp.y)
-                    {
-                        points.push_back(tmp);
-                        ++n;
-                    }
+                        {
+                            points.push_back(tmp);
+                            ++n;
+                        }
 
+                    // Create an output file which is in the format "hull_J_" + (File Name)
                     outputFile = "hull_J_" + dataFilename;
                     std::ofstream hullFile(outputFile);
+
+                    // Run Jarvis March 10 times to get better runtime results
                     for (int i = 0; i <10; ++i)
                         jConvexHull(points, n, hullFile);
 
@@ -105,42 +125,44 @@ int main(int argc, char *argv[])
                     break;
                 }
             case 'Q':
-            {
-                //call your Quickhull algorithm to solve the problem
-
-                Point tmp;
-                std::vector<Point> vPair, cHull;
-                int n=0, x=0, y=0;
-
-                while(dataFile >> tmp.x >> tmp.y)
                 {
-                    vPair.push_back(tmp);
-                    ++n;
+                    //call your Quickhull algorithm to solve the problem
+                    Point tmp;
+                    std::vector<Point> points, cHull;
+                    int n=0, x=0, y=0;
+
+                    // Read data points from file and store them as points in a vector
+                    while(dataFile >> tmp.x >> tmp.y)
+                        {
+                            points.push_back(tmp);
+                            ++n;
+                        }
+
+                    // NOTE: I could not get Quickhull to work with a vector so
+                    // This code takes the vectors elements and puts them in a pointer array.
+                    int vSize = points.size();
+                    Point *aPoints = new Point [vSize];
+                    for(int i = 0; i < vSize; ++i)
+                        aPoints[i] = points[i];
+
+                    // Create an output file which is in the format "hull_Q_" + (File Name)
+                    outputFile = "hull_Q_" + dataFilename;
+                    std::ofstream hullFile(outputFile);
+
+                    // Run Quick Hull 10 times to get a better runtime result
+                    for (int i = 0; i <10; ++i)
+                        qPrintHull(aPoints, n, cHull, hullFile);
+
+                    hullFile.close();
+                    break;
                 }
-
-                int vSize = vPair.size();
-                Point *aPoints = new Point [vSize];
-                for(int i = 0; i < vSize; ++i)
-                    aPoints[i] = vPair[i];
-
-                outputFile = "hull_Q_" + dataFilename;
-                std::ofstream hullFile(outputFile);
-                for (int i = 0; i <10; ++i)
-                    qPrintHull(aPoints, n, cHull, hullFile);
-
-                hullFile.close();
-                break;
-
-                outputFile = "hull_Q.txt";
-                break;
-            }
             default:
-                //any other parameter is called
-                std::cout << "You done messed up AA Ron!" << std::endl;
+                // any other parameter is called
+                // see the Key & Peele Skit Substitute Teacher for reference
+                // https://www.youtube.com/watch?v=Dd7FixvoKBw
+                std::cout << "You done messed up TA" << std::endl;
                 break;
         }
-
-        //write your convex hull to the outputFile (see class example for the format)
         //you should be able to visulize your convex hull using the "ConvexHull_GUI" program.
         dataFile.close();
     }
