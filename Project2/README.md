@@ -4,14 +4,14 @@
 
 * **Do not modify these files or folders unless you want to run them using your own makefile**
 
-##convexHull435.cpp:
+## convexHull435.cpp:
 
 * To run the program, in a terminal type `make`
 * Once it is done type `make runJ` or `make runG` or `make runQ` to run the program with the appropriate Algorithm.
 * It may take a while to run **ALL** the datasets for an Algorithm but please be patient.
 
 * The program should generate a file for each datafile in the *output/[Algorithm]/* folder that shows the time it took to run the algorithm on specific types of data sets.
-* These files are called *test_[Algorithm]_[Data File Name].txt* 
+* These files are called *test_[Algorithm]_[Data File Name].txt*
 
 This folder contains the program to generate very large Prime numbers. It creates a random large integer (using BigUnsigned to allow large numbers) of 512 bits long. It then uses Fermat's Little Theorem to test for primality using the number 2 and 3. P and Q are then stored in the file called "p_q.txt"
 
