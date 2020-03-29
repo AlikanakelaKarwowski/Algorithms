@@ -20,12 +20,12 @@ cleanTest :
 	@rm output/quickHull/test*
 
 .PHONY: cleanAll
-cleanAll: clean cleanTest
+cleanAll: clean
 	@rm -f *10*.txt
 
 #generates all hull_J_*.txt files with Jarvis March.
 .PHONY: runJ
-runJ :
+runJ : 
 	@echo "Running Jarvis March Algorithm"
 	@time -o output/jarvisMarch/test_J_rectangle10.txt -f "Program: %C\nTotal time: %E\n" ./convexHull435 J rectangle10.txt
 	@time -o output/jarvisMarch/test_J_rectangle100.txt -f "Program: %C\nTotal time: %E\n" ./convexHull435 J rectangle100.txt
@@ -52,9 +52,9 @@ runJ :
 	@time -o output/jarvisMarch/test_J_triangle100000.txt -f "Program: %C\nTotal time: %E\n" ./convexHull435 J triangle100000.txt
 	@time -o output/jarvisMarch/test_J_triangle1000000.txt -f "Program: %C\nTotal time: %E\n" ./convexHull435 J triangle1000000.txt
 
-#generates all hull_J_*.txt files with Jarvis March.
+#generates all hull_G_*.txt files with Jarvis March.
 .PHONY: runG
-runG :
+runG : 
 	@echo "Running Graham Scan Algorithm"
 	@time -o output/grahamScan/test_G_rectangle10.txt -f "Program: %C\nTotal time: %E\n" ./convexHull435 G rectangle10.txt
 	@time -o output/grahamScan/test_G_rectangle100.txt -f "Program: %C\nTotal time: %E\n" ./convexHull435 G rectangle100.txt
@@ -82,7 +82,7 @@ runG :
 	@time -o output/grahamScan/test_G_triangle1000000.txt -f "Program: %C\nTotal time: %E\n" ./convexHull435 G triangle1000000.txt
 
 .PHONY: runQ
-runQ :
+runQ : 
 	@echo "Running QuickHull Algorithm"
 	@time -o output/quickHull/test_Q_rectangle10.txt -f "Program: %C\nTotal time: %E\n" ./convexHull435 Q rectangle10.txt
 	@time -o output/quickHull/test_Q_rectangle100.txt -f "Program: %C\nTotal time: %E\n" ./convexHull435 Q rectangle100.txt
@@ -112,10 +112,13 @@ runQ :
 .PHONY: runAll
 runAll: convexHull435 runJ runG runQ
 
-.PHONY: testJ
-testJ: convexHull435
+.PHONY: generate
+generate:
 	javac ConvexHull_GUI.java
 	java ConvexHull_GUI 1
+
+.PHONY: testJ
+testJ: convexHull435 generate
 	make runJ
 	java ConvexHull_GUI 0 circle10.txt hull_J_
 	java ConvexHull_GUI 0 circle100000.txt hull_J_
@@ -127,9 +130,7 @@ testJ: convexHull435
 	java ConvexHull_GUI 0 triangle100000.txt hull_J_
 
 .PHONY: testG
-testG: convexHull435
-	javac ConvexHull_GUI.java
-	java ConvexHull_GUI 1
+testG: convexHull435 generate
 	make runG
 	java ConvexHull_GUI 0 circle10.txt hull_G_
 	java ConvexHull_GUI 0 circle100000.txt hull_G_
@@ -141,9 +142,7 @@ testG: convexHull435
 	java ConvexHull_GUI 0 triangle100000.txt hull_G_
 
 .PHONY: testQ
-testQ: convexHull435
-	javac ConvexHull_GUI.java
-	java ConvexHull_GUI 1
+testQ: convexHull435 generate
 	make runQ
 	java ConvexHull_GUI 0 circle10.txt hull_Q_
 	java ConvexHull_GUI 0 circle100000.txt hull_Q_
